@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils'
 import { useDashboard } from '@/lib/dashboard-context'
 import { useSidebarState } from '@/lib/sidebar-context'
 import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 interface NavItem {
@@ -100,15 +101,31 @@ function SidebarContent({
         ))}
       </nav>
 
-      {/* Footer */}
+      {/* Footer - Theme Toggle */}
       <div className="border-t border-sidebar-border p-3">
-        <button
-          onClick={toggleDarkMode}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+        <div
+          className={cn(
+            'flex items-center rounded-lg px-3 py-2.5',
+            collapsed ? 'justify-center' : 'justify-between'
+          )}
         >
-          {isDarkMode ? <Sun className="size-5" /> : <Moon className="size-5" />}
-          {!collapsed && <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>}
-        </button>
+          {!collapsed && (
+            <div className="flex items-center gap-2">
+              <Sun className="size-4 text-sidebar-foreground/70" />
+              <span className="text-sm font-medium text-sidebar-foreground/70">Theme</span>
+            </div>
+          )}
+          <div className="flex items-center gap-2">
+            {collapsed && <Sun className="size-4 text-sidebar-foreground/70" />}
+            <Switch
+              checked={isDarkMode}
+              onCheckedChange={toggleDarkMode}
+              className="data-[state=checked]:bg-sidebar-primary data-[state=unchecked]:bg-sidebar-accent"
+            />
+            {collapsed && <Moon className="size-4 text-sidebar-foreground/70" />}
+          </div>
+          {!collapsed && <Moon className="size-4 text-sidebar-foreground/70" />}
+        </div>
       </div>
     </div>
   )
